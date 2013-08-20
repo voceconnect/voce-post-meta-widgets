@@ -14,12 +14,13 @@ class Voce_Post_Meta_Widget_Area {
 	 * Setup plugin
 	 */
 
+	const WIDGET_ID_PREFIX = "voce_post_meta_widget_area_";
+
 	public static function initialize() {
 		global $pagenow;
 		require_once( ABSPATH . '/wp-admin/includes/widgets.php' );
 		add_action( 'init', array( __CLASS__, 'initialize' ) );
-		add_action( 'wp_ajax_get-active-widgets', array( __CLASS__, 'ajax_get_active_widgets' ) );
-		add_action( 'wp_ajax_register-sidebar', array( __CLASS__, 'ajax_register_sidebar' ) );
+		//add_action( 'init', array( __CLASS__, 'hide_sidebars' ));
 		add_filter( 'meta_type_mapping', array(__CLASS__, 'meta_type_mapping') );
 		add_action( 'admin_enqueue_scripts', array(__CLASS__, 'action_admin_enqueue_scripts') );
 		$post_types = array_unique( apply_filters( 'voce_post_meta_widget_area_post_types', array( 'page' ) ) );
@@ -28,6 +29,23 @@ class Voce_Post_Meta_Widget_Area {
 				add_meta_box( 'sidebar_admin', 'Sidebar Admin', array( __CLASS__, 'sidebar_admin_metabox' ), $post_type, apply_filters('voce_post_meta_widget_area_widget_choices_location', 'side'), apply_filters('voce_post_meta_widget_area_widget_choices_priority', 'low') );
 			}
 		});
+	}
+	/**
+	  *
+	  * Hide Custom Sidebars on Widgets.php 
+	  * @return void
+	  *
+	  */
+
+	public static function hide_sidebars(){
+		global $pagenow, $wp_registered_sidebars;
+		if ( is_admin() && 'widgets.php' == $pagenow ) {
+			foreach ( $wp_registered_sidebars as $sidebar ) {
+				if ( false !== strpos( $sidebar['id'], self::WIDGET_ID_PREFIX ) ) {
+					unregister_sidebar( $sidebar['id'] );
+				}
+			}
+		}
 	}
 
 	/**
@@ -122,34 +140,7 @@ class Voce_Post_Meta_Widget_Area {
 	}	
 
 
-		/**
-		 * Retrieve sidebars and output HTML for metabox
-		 * 
-		 * @global Object $post
-		 * @global Array $wp_registered_sidebars 
-		 * @return Void
-		 */
-
-		public static function get_sidebars() {
-			global $post, $wp_registered_sidebars;
-
-			$i = 0;
-
-			?><select class="sidebar-list"><?php 
-
-			foreach ($wp_registered_sidebars as $sidebar) {
-				// Ignore sidebars registered by this plugin.
-				if ( strpos( $sidebar['id'], self::WIDGET_ID_PREFIX ) === 0 ) {
-					continue;
-				}
-
-				?><option id="<?php echo self::get_sidebar_id( $post->post_name, $i ); ?>" data-sidebar="<?php echo $sidebar['id']; ?>"><?php echo $sidebar['name']; ?></option><?php
-				$i++;
-			}
-
-			?></select><?php 
-		}
-
+		
 
 }
 
@@ -166,15 +157,17 @@ function voce_widget_area_field_display( $field, $value, $post_id ) {
 	if ( ! class_exists( 'Voce_Meta_API' ) ) {
 		return;
 	}
+	
+	
 	global $post;
 
 	$post_type = get_post_type( $post_id );
 	$value_post = get_post( $value );
-	$url_class = '';
+	
 	?>
 	<br />
 	<hr />
-	<p>Widget Area balh</p>
+	<p>Widget Area ID = <?php echo $field->get_input_id() ?> </p>
 
 	<?php
 }
