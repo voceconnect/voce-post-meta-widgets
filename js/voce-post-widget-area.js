@@ -24,13 +24,13 @@ jQuery(document).ready(function($) {
 		init : function init() {
 			var the_id, rem, $first;
 
-			pageWidgets.sidebarWidgets = $.parseJSON(widgetsAdmin.sidebars_widgets.replace(/&quot;/g, '"'));
+			//pageWidgets.sidebarWidgets = $.parseJSON(widgetsAdmin.sidebars_widgets.replace(/&quot;/g, '"'));
 
 			// @todo: update height as widgets are added / expanded
 			//$('.sidebar').css('height', $('.column-1').height());
 
 			if($('.voce-post-meta-widget-drop.column-2 .description').size() === 0) { 
-				$('.voce-post-meta-widget-drop.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + widgetsAdmin.post_name + ' page.</p>');
+				//$('.voce-post-meta-widget-drop.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + widgetsAdmin.post_name + ' page.</p>');
 			}
 
 			$first = $('.voce-post-meta-widget-drop.column-2 .sidebar-list :first');
@@ -91,6 +91,7 @@ jQuery(document).ready(function($) {
 							ui.item.attr( 'id', 'new-' + id );
 							rem = 'div#' + id;
 						}
+						alert (ui.item);
 						pageWidgets.save( ui.item, 0, 0, 1 );
 						ui.item.find('input.add_new').val('');
 						ui.item.find('a.widget-action').click();
@@ -133,7 +134,7 @@ jQuery(document).ready(function($) {
 			$('.voce-post-meta-widget-drop.column-2 .widget-control-remove').live('click', function(e) {
 				e.preventDefault();
 				// removing save action from when any action but save is clicked ...
-				// pageWidgets.save($(this).closest('.widget'), 1, 1, 1);
+				 pageWidgets.save($(this).closest('.widget'), 1, 1, 1);
 				$(this).closest('.widget').remove();
 			});
 
@@ -143,6 +144,7 @@ jQuery(document).ready(function($) {
 			*/
 			$('.voce-post-meta-widget-drop.column-2 .widget-control-save').live('click', function(e) {
 				e.preventDefault();
+			
 				pageWidgets.save($(this).closest('.widget'), 0, 0, 0);
 			});
 
@@ -174,7 +176,7 @@ jQuery(document).ready(function($) {
 					function(data) {
 						$('.voce-post-meta-widget-drop.column-2 .sidebar').html(data);
 						if($('.voce-post-meta-widget-drop.column-2 .description').size() === 0) { 
-							$('.voce-post-meta-widget-drop.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + widgetsAdmin.post_name + ' page.</p>');
+							//$('.voce-post-meta-widget-drop.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + widgetsAdmin.post_name + ' page.</p>');
 						}
 					}
 					);
@@ -187,25 +189,13 @@ jQuery(document).ready(function($) {
 		 *@method save
 		 */
 		save : function save(widget, del, animate, order) {
+			alert ("saving");
 			var data, a;
 			data = widget.find('.widget-inside :input').serialize();
 
 			$('.ajax-feedback', widget).css('visibility', 'visible');
 
-			if( $('.voce-post-meta-widget-drop.column-2 .sidebar').children().size() === 2 ) {
-				$.post(
-					ajaxurl,
-					{
-						action: 'register-sidebar',
-						sidebar: pageWidgets.sidebar,
-						original_sidebar: pageWidgets.originalSidebar,
-						post_name: widgetsAdmin.post_name
-					},
-					function(data) {
-					}
-					);
-			}
-
+			
 			a = {
 				action: 'save-widget',
 				savewidgets: $('#_wpnonce_widgets').val(),
