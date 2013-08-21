@@ -1,11 +1,8 @@
-jQuery(document).ready(function($) {
-	alert("!");
-	jQuery("#submitpost").on("click", "#publish, #save-post", function(e){
-		alert("prevent");
-		e.preventDefault();
-	});
-});
+//remove document ready if not needed
 
+jQuery(document).ready(function($) {
+
+});
 
 (function(document, $) {
 	"use strict";
@@ -91,13 +88,15 @@ jQuery(document).ready(function($) {
 							ui.item.attr( 'id', 'new-' + id );
 							rem = 'div#' + id;
 						}
-						pageWidgets.save( ui.item, 0, 0, 1 );
+						// removing save action from when any action but save is clicked ...
+						//pageWidgets.save( ui.item, 0, 0, 1 );
 						ui.item.find('input.add_new').val('');
 						ui.item.find('a.widget-action').click();
 						return;
 					}
 
-					pageWidgets.saveOrder();
+					// removing save action from when any action but save is clicked ...
+					//pageWidgets.saveOrder();
 				}
 			});
 
@@ -143,7 +142,8 @@ jQuery(document).ready(function($) {
 			*/
 			$('.voce-post-meta-widget-drop.column-2 .widget-control-save').live('click', function(e) {
 				e.preventDefault();
-				pageWidgets.save($(this).closest('.widget'), 0, 0, 0);
+				// removing save action from when any action but save is clicked ...
+				// pageWidgets.save($(this).closest('.widget'), 0, 0, 0);
 			});
 
 			/**
@@ -226,7 +226,8 @@ jQuery(document).ready(function($) {
 				);
 
 			if(order){
-				pageWidgets.saveOrder();
+				// removing save action from when any action but save is clicked ...
+				//pageWidgets.saveOrder();
 			}
 		},
 

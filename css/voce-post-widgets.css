@@ -1,0 +1,5 @@
+/* Since the save action will take place when the post is saved, this CSS hides the save button on post edit pages, to avoid confusion. */
+
+.voce-post-meta-widget-drop .widget-control-save {
+	display:none ;
+}
