@@ -36,20 +36,34 @@ module.exports = function(grunt) {
             },
             files: {
                 "js/voce-post-meta-widgets.min.js": [
-                    "js/voce-post-meta-widgets.js",
+                    "js/*.js",
+                    "!js/*.min.js",
                 ],
             }
         }
+    },
+    cssmin: {
+       minify: {
+       expand: true,
+       cwd: 'css/',
+       src: [
+        '*.css', 
+        '!*.min.css'
+       ],
+       dest: 'css/',
+       ext: '.min.css'
+      }
     }
   });
 
   // Load npm plugins to provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
 
   // Default tasks to be run.
   grunt.registerTask('default', [
-    'jshint', 'uglify'
+    'jshint', 'uglify', 'cssmin'
   ]);
 
 };

@@ -124,7 +124,7 @@ class Voce_Post_Meta_Widgets {
 			return;
 		}
 		wp_enqueue_script( 'voce-post-meta-widgets', self::plugins_url( '/js/voce-post-meta-widgets.min.js', __FILE__ ), array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ) );
-		wp_enqueue_style( 'voce-post-meta-widgets', self::plugins_url( '/css/voce-post-meta-widgets.css', __FILE__ ) );
+		wp_enqueue_style( 'voce-post-meta-widgets', self::plugins_url( '/css/voce-post-meta-widgets.min.css', __FILE__ ) );
 	}
 
 	/**
