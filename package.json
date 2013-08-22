@@ -15,14 +15,10 @@
   },
   
   "main": "Gruntfile.js",
-  "scripts": {
-    "test": "grunt test"
-  },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-cssmin": "~0.6.1",
-    "grunt": "~0.4.1",
-    "marked": "latest"
+    "grunt": "~0.4.1"
   }
 }

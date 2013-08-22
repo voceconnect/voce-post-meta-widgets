@@ -1,6 +1,6 @@
 /*
  * Voce Post Meta Widgets
- * https://github.com/voceplatforms/Afterburner
+ * https://github.com/voceconnect/voce-post-meta-widgets
  * Copyright (c) 2013
  * Licensed under the MIT license.
  */
