@@ -1,0 +1,27 @@
+{
+  "name": "voce-post-meta-widgets",
+  "description": "Extend Voce Post Meta with widget fields",
+  "version": "0.1.0",
+  "homepage": "https://github.com/voceconnect/voce-post-meta-widgets",
+  "author": {
+    "name": "voceplatforms"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:voceconnect/voce-post-meta-widgets.git"
+  },
+  "bugs": {
+    "url": "https://github.com/voceconnect/voce-post-meta-widgets/issues"
+  },
+  
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-uglify": "latest",
+    "grunt": "~0.4.1",
+    "marked": "latest"
+  }
+}

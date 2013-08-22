@@ -1,8 +1,6 @@
-/*jslint browser:true */
-/*global $, jQuery, ajaxurl*/
+/*global jQuery, ajaxurl*/
 var wpWidgets;
 (function($) {
-"use strict";
 wpWidgets = {
 
 	init : function() {
@@ -25,7 +23,7 @@ wpWidgets = {
 		});
 
 		sidebars.each(function(){
-			if ( $(this).parent().hasClass('inactive') ){ 
+			if ( $(this).parent().hasClass('inactive') ){
 				return true;
 			}
 
@@ -244,7 +242,7 @@ wpWidgets = {
 				if ( animate ) {
 					order = 0;
 					widget.slideUp('fast', function(){
-						$(this).remove(); 
+						$(this).remove();
 						wpWidgets.saveOrder();
 					});
 				} else {
