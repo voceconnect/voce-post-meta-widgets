@@ -9,22 +9,22 @@
   License: GPL2
  */
 
-class Voce_Post_Meta_Widget_Area {
+class Voce_Post_Meta_Widgets {
 	/**
 	 *
 	 * Class notes:
 	 * 	Filters:
-	 * 	voce_post_meta_widget_area_post_types - post types that have widget area added (defaults to none)
-	 * 	voce_post_meta_widget_area_widget_choices_location - location of metabox for widget choices (defaults to side)
-	 * 	voce_post_meta_widget_area_widget_choices_priority - priority of metabox for widget choices (defaults to low)
+	 * 	voce_post_meta_widgets_post_types - post types that have widget area added (defaults to none)
+	 * 	voce_post_meta_widgets_widget_choices_location - location of metabox for widget choices (defaults to side)
+	 * 	voce_post_meta_widgets_widget_choices_priority - priority of metabox for widget choices (defaults to low)
 	 *
 	 */
 
-	const WIDGET_ID_PREFIX 		= "voce_post_meta_widget_area_";
+	const WIDGET_ID_PREFIX 		= "voce_post_meta_widgets_";
 	const SIDEBAR_OPTION_NAME 	= "voce_post_meta_sidebars";
 
 	public static function initialize() {
-		$post_types = apply_filters( 'voce_post_meta_widget_area_post_types', array( ) );
+		$post_types = apply_filters( 'voce_post_meta_widgets_post_types', array( 'page' ) );
 		// if no post types are specified, we don't need to run this
 		if ( ! is_array( $post_types ) ) {
 			return;
@@ -36,10 +36,10 @@ class Voce_Post_Meta_Widget_Area {
 		// add metaboxes to the post types specified
 		add_action( 'add_meta_boxes', function() use ($post_types) {
 			foreach ($post_types as $post_type) {
-				add_meta_box( 'sidebar_admin', 'Sidebar Admin', array( __CLASS__, 'sidebar_admin_metabox' ), $post_type, apply_filters('voce_post_meta_widget_area_widget_choices_location', 'side'), apply_filters('voce_post_meta_widget_area_widget_choices_priority', 'low') );
+				add_meta_box( 'sidebar_admin', 'Sidebar Admin', array( __CLASS__, 'sidebar_admin_metabox' ), $post_type, apply_filters('voce_post_meta_widgets_widget_choices_location', 'side'), apply_filters('voce_post_meta_widgets_widget_choices_priority', 'low') );
 			}
 		});
-		$sidebars = get_option( Voce_Post_Meta_Widget_Area::SIDEBAR_OPTION_NAME );
+		$sidebars = get_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME );
 		if ( is_array( $sidebars )) {
 			foreach( $sidebars as $sidebar ) {
 			$args = array(
@@ -71,7 +71,7 @@ class Voce_Post_Meta_Widget_Area {
 
 						?>
 						<div class="sidebar widget-droppable widget-list" id="<?php echo $post->post_name; ?>_0">
-							<?php Voce_Post_Meta_Widget_Area::get_active_widgets( $sidebar ); ?>
+							<?php Voce_Post_Meta_Widgets::get_active_widgets( $sidebar ); ?>
 						</div>
 						<?php
 						}
@@ -109,7 +109,7 @@ class Voce_Post_Meta_Widget_Area {
 	 * Enqueue admin JavaScripts and CSS
 	 *
 	 * Filters:
-	 * voce_post_meta_widget_area_scripts - filter what pages the scripts/styles needs (defaults to 'post-new.php' and 'post.php')
+	 * voce_post_meta_widgets_scripts - filter what pages the scripts/styles needs (defaults to 'post-new.php' and 'post.php')
 	 *
 	 * @method action_admin_enqueue_scripts
 	 * @param type $hook
@@ -118,13 +118,13 @@ class Voce_Post_Meta_Widget_Area {
 
 	public static function action_admin_enqueue_scripts( $hook ) {
 		global $post;
-		$pages = apply_filters( 'voce_post_meta_widget_area_scripts', array('post-new.php', 'post.php') );
+		$pages = apply_filters( 'voce_post_meta_widgets_scripts', array('post-new.php', 'post.php') );
 
 		if( !in_array( $hook, $pages ) ) {
 			return;
 		}
-		wp_enqueue_script( 'voce-post-widget-area', self::plugins_url( '/js/voce-post-widgets.js', __FILE__ ), array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ) );
-		wp_enqueue_style( 'voce-post-widget-area', self::plugins_url( '/css/voce-post-widgets.css', __FILE__ ) );
+		wp_enqueue_script( 'voce-post-meta-widgets', self::plugins_url( '/js/voce-post-meta-widgets.js', __FILE__ ), array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ) );
+		wp_enqueue_style( 'voce-post-meta-widgets', self::plugins_url( '/css/voce-post-meta-widgets.css', __FILE__ ) );
 	}
 
 	/**
@@ -167,11 +167,11 @@ class Voce_Post_Meta_Widget_Area {
 	 */
 
 	public static function meta_type_mapping( $mapping ) {
-		$mapping['widget_area'] = array(
+		$mapping['widgets'] = array(
 			'class' => 'Voce_Meta_Field',
 			'args' => array(
-				'display_callbacks' => array( 'voce_widget_area_field_display' ),
-				'sanitize_callbacks' => array( 'voce_widget_area_field_submit' )
+				'display_callbacks' => array( 'voce_widgets_field_display' ),
+				'sanitize_callbacks' => array( 'voce_widgets_field_submit' )
 			)
 		);
 		return $mapping;
@@ -238,20 +238,20 @@ class Voce_Post_Meta_Widget_Area {
 
 /**
  * 
- * @method voce_widget_area_field_display
+ * @method voce_widgets_field_display
  * @param type $field
  * @param type $value
  * @param type $post_id
  * @return void
  */
 
-function voce_widget_area_field_display( $field, $value, $post_id ) {
+function voce_widgets_field_display( $field, $value, $post_id ) {
 	if ( ! class_exists( 'Voce_Meta_API' ) ) {
 		return;
 	}
 	$post_type 	= get_post_type( $post_id );
 	$value_post = get_post( $value );
-	$sidebar_id = Voce_Post_Meta_Widget_Area::WIDGET_ID_PREFIX . $field->get_input_id() . '_post_id_' . $post_id;
+	$sidebar_id = Voce_Post_Meta_Widgets::WIDGET_ID_PREFIX . $field->get_input_id() . '_post_id_' . $post_id;
 	?>
 	<input type="hidden" id="voce-post-widgets-exist" value="true" />
 	<div class="column-2 voce-post-meta-widget-drop">
@@ -259,7 +259,7 @@ function voce_widget_area_field_display( $field, $value, $post_id ) {
 		<div class="sidebar voce-post-meta-widget-wrap">
 				<div class="column-2-widgets">
 					<div class="sidebar widget-droppable widget-list" id="<?php echo $post->post_name; ?>_0">
-						<?php Voce_Post_Meta_Widget_Area::get_active_widgets( $sidebar_id ); ?>
+						<?php Voce_Post_Meta_Widgets::get_active_widgets( $sidebar_id ); ?>
 					</div>
 				</div>
 		</div>
@@ -271,7 +271,7 @@ function voce_widget_area_field_display( $field, $value, $post_id ) {
 /**
  * Callback before post is submitted
  * 
- * @method voce_widget_area_field_submit
+ * @method voce_widgets_field_submit
  * @param type $field
  * @param type $value
  * @param type $post_id
@@ -279,19 +279,19 @@ function voce_widget_area_field_display( $field, $value, $post_id ) {
  *
  */
 
-function voce_widget_area_field_submit( $field, $value, $post_id ) {
+function voce_widgets_field_submit( $field, $value, $post_id ) {
 	global $post;
-	$sidebar_id	= Voce_Post_Meta_Widget_Area::WIDGET_ID_PREFIX . $field->get_input_id() . '_post_id_' . $post->ID;
-	$sidebars 	= get_option( Voce_Post_Meta_Widget_Area::SIDEBAR_OPTION_NAME );
+	$sidebar_id	= Voce_Post_Meta_Widgets::WIDGET_ID_PREFIX . $field->get_input_id() . '_post_id_' . $post->ID;
+	$sidebars 	= get_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME );
 	$sidebars[] = $sidebar_id;
 	$sidebars 	= array_unique( $sidebars );
-	$sidebars 	= Voce_Post_Meta_Widget_Area::clean_sidebars( $sidebars );
-	update_option( Voce_Post_Meta_Widget_Area::SIDEBAR_OPTION_NAME, $sidebars );
+	$sidebars 	= Voce_Post_Meta_Widgets::clean_sidebars( $sidebars );
+	update_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME, $sidebars );
 }
 
 
 add_action('init', function(){
 	if ( class_exists( 'Voce_Meta_API' ) ) {
-		Voce_Post_Meta_Widget_Area::initialize();	
+		Voce_Post_Meta_Widgets::initialize();	
 	}
 }, 1);

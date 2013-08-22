@@ -1,4 +1,5 @@
 /*jslint browser:true */
+/*global $, jQuery, ajaxurl*/
 var wpWidgets;
 (function($) {
 "use strict";
@@ -306,4 +307,4 @@ wpWidgets = {
 
 $(document).ready(function($){ wpWidgets.init(); });
 
-})(jQuery);
+}(jQuery));
