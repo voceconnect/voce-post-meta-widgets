@@ -197,6 +197,10 @@ wpWidgets = {
 	},
 
 	save : function(widget, del, animate, order) {
+		/* If a widget form isn't automagically created by the browser create the form */
+		if ( ! widget.find('form').length ) {
+			widget.find( '.widget-inside' ).wrapInner( '<form method="post" action="">' );
+		}
 		var sb = widget.closest('div.widgets-sortables').attr('id'), data = widget.find('form').serialize(), a;
 		widget = $(widget);
 		$('.spinner', widget).show();
