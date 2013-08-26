@@ -51,11 +51,12 @@ class Voce_Post_Meta_Widgets {
 				'before_title' => '<h2 class="widgettitle">',
 				'after_title' => '</h2>'
 			);
+				error_log($sidebar . "\n", 3, "/var/tmp/a.log");
 				register_sidebar( $args );
 			}
 		}
 		
-		add_action( 'add_meta_boxes', function() use ($post, $post_types) {
+		add_action( 'add_meta_boxes', function() use ( $post_types ) {
 			global $post;
 			$the_sidebars = wp_get_sidebars_widgets();
 			foreach( $the_sidebars as $key=>$val ) {
