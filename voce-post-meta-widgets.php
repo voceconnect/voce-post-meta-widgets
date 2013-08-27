@@ -119,7 +119,7 @@ class Voce_Post_Meta_Widgets {
 
 	public static function action_admin_enqueue_scripts( $hook ) {
 		global $post;
-		$pages = apply_filters( 'voce_post_meta_widgets_scripts', array('post-new.php', 'post.php') );
+		$pages = apply_filters( 'voce_post_meta_widgets_scripts', array( 'post-new.php', 'post.php', 'edit.php' ) );
 
 		if( !in_array( $hook, $pages ) ) {
 			return;
