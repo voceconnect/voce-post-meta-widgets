@@ -129,7 +129,7 @@ wpWidgets = {
 					if ( 'multi' === add ) {
 						ui.item.html( ui.item.html().replace(/<[^<>]+>/g, function(m){ return m.replace(/__i__|%i%/g, n); }) );
 						ui.item.attr( 'id', id.replace('__i__', n) );
-						n = n+1;
+						n = parseInt(n, 10) + 1;
 						$('div#' + id).find('input.multi_number').val(n);
 					} else if ( 'single' === add ) {
 						ui.item.attr( 'id', 'new-' + id );

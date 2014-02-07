@@ -259,7 +259,7 @@ function voce_widgets_field_display( $field, $value, $post_id ) {
 		<label for="meta_elements_description"><strong><?php _e( 'Active Widgets' ); ?></strong></label>
 		<div class="sidebar voce-post-meta-widget-wrap">
 				<div class="column-2-widgets">
-					<div class="sidebar widget-droppable widget-list" id="<?php echo $post->post_name; ?>_0">
+					<div class="sidebar widget-droppable widget-list" id="<?php echo $value_post->post_name; ?>_0">
 						<?php Voce_Post_Meta_Widgets::get_active_widgets( $sidebar_id ); ?>
 					</div>
 				</div>
