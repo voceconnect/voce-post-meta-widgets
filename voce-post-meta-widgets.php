@@ -3,11 +3,14 @@
   Plugin Name: Voce Post Meta Widgets
   Plugin URI: http://vocecommunications.com
   Description: Extend Voce Post Meta with widget fields
-  Version: 0.1.0
+  Version: 0.1.1
   Author: matstars, voceplatforms
   Author URI: http://vocecommunications.com
   License: GPL2
  */
+
+
+add_action( 'admin_init', 'voce_meta_widgets_check_voce_meta_api' );
 
 class Voce_Post_Meta_Widgets {
 	/**
@@ -296,3 +299,29 @@ add_action('init', function(){
 		Voce_Post_Meta_Widgets::initialize();	
 	}
 }, 1);
+
+
+
+/**
+ * Check if Voce Post Meta is loaded
+ * @method check_voce_meta_api
+ * @return void
+ */
+function voce_meta_widgets_check_voce_meta_api() {
+	if ( !class_exists('Voce_Meta_API')) {
+  		add_action('admin_notices', 'voce_meta_widgets_voce_meta_api_not_loaded' );
+  	}
+}
+
+/**
+ * Display message if Voce_Meta_API class (or Voce Post Meta plugin, more likely) is not available
+ * @method voce_meta_api_not_loaded
+ * @return void
+ */
+function voce_meta_widgets_voce_meta_api_not_loaded() {
+    printf(
+      '<div class="error"><p>%s</p></div>',
+      __('Voce Post Meta Widgets Plugin cannot be utilized without the <a href="https://github.com/voceconnect/voce-post-meta" target="_BLANK">Voce Post Meta</a> plugin.')
+    );
+}		
+
