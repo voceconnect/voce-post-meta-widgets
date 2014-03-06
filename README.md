@@ -3,7 +3,7 @@ Voce Post Meta Widgets
 
 Contributors: matstars, voceplatforms
 Tags: post, meta, widgets, widget area  
-Requires at least: 3.3
+Requires at least: 3.3  
 Tested up to: 3.8.1  
 Stable tag: 0.1.1  
 License: GPLv2 or later  
