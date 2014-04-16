@@ -27,7 +27,7 @@ class Voce_Post_Meta_Widgets {
 	const SIDEBAR_OPTION_NAME 	= "voce_post_meta_sidebars";
 
 	public static function initialize() {
-		$post_types = apply_filters( 'voce_post_meta_widgets_post_types', array( 'page' ) );
+		$post_types = apply_filters( 'voce_post_meta_widgets_post_types', array() );
 		// if no post types are specified, we don't need to run this
 		if ( ! is_array( $post_types ) ) {
 			return;
