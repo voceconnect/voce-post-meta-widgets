@@ -54,7 +54,6 @@ class Voce_Post_Meta_Widgets {
 				'before_title' => '<h2 class="widgettitle">',
 				'after_title' => '</h2>'
 			);
-				error_log($sidebar . "\n", 3, "/var/tmp/a.log");
 				register_sidebar( $args );
 			}
 		}
