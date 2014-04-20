@@ -1,10 +1,10 @@
 === Voce Meta Post Meta Widgets ===
 Contributors: matstars, voceplatforms
-Donate link: 
-Tags: 
+Donate link:
+Tags:
 Requires at least: 3.3
-Tested up to: 3.8.1
-Stable tag: 0.1.1
+Tested up to: 3.9.0
+Stable tag: 0.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,9 @@ add_filter('voce_post_meta_widgets_post_types', function( $current_post_types ) 
 ```
 
 == Changelog ==
+
+= 0.1.2 =
+* Refactored load order
 
 = 0.1.1 =
 * Update to check for Voce_Meta_API
