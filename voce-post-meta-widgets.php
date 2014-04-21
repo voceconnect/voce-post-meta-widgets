@@ -342,7 +342,7 @@ if ( !function_exists( 'voce_widgets_field_submit' ) ) {
 		}
 		$sidebar_id = Voce_Post_Meta_Widgets::WIDGET_ID_PREFIX . $field->get_input_id() . '_post_id_' . $post_id;
 		$sidebars = get_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME );
-		$sidebars = array_merge( (array) $sidebars, array( $sidebar_id ) );
+		$sidebars = array_unique(array_merge( (array) $sidebars, array( $sidebar_id ) ));
 		$sidebars = Voce_Post_Meta_Widgets::clean_sidebars( $sidebars );
 		update_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME, $sidebars );
 	}

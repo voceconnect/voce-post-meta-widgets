@@ -1,7 +1,6 @@
 === Voce Meta Post Meta Widgets ===
-Contributors: matstars, voceplatforms
-Donate link:
-Tags:
+Contributors: matstars, markparolisi, voceplatforms
+Tags: post, meta, widgets, widget area
 Requires at least: 3.3
 Tested up to: 3.9.0
 Stable tag: 0.1.2

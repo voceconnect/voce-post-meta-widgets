@@ -1,7 +1,7 @@
 Voce Post Meta Widgets
 ==================
 
-Contributors: matstars, voceplatforms
+Contributors: matstars, markparolisi, voceplatforms
 Tags: post, meta, widgets, widget area
 Requires at least: 3.3
 Tested up to: 3.9.0
@@ -51,7 +51,7 @@ add_filter('voce_post_meta_widgets_post_types', function( $current_post_types ) 
 ```
 
 **0.1.2**
-* Refactored load order
+*Refactored load order*
 
 **0.1.1**
 *Update to check for Voce_Meta_API*
