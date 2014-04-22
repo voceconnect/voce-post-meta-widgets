@@ -7,12 +7,8 @@
 .voce-post-meta-widget-drop .widget-placeholder {
 	width:100%;
 }
-
-
-/* the hidden id uses underscores */
-
-#voce_widgets_hidden, .voce-hide-me {
-	display:none !important;
+#voce_widgets_hidden {
+	display: none;
 }
 
 .voce-post-meta-widget-wrap div.widgets-sortables {
