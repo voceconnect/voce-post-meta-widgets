@@ -35,6 +35,10 @@ add_filter('voce_post_meta_widgets_post_types', function( $current_post_types ) 
 	return $post_types;
 });
 ```
+1. Display the sidebar on a page
+```
+if( !dynamic_sidebar( Voce_Post_Meta_Widgets::WIDGET_ID_PREFIX . '_' . $group_name . '_' . $field_name . '_post_id_' . get_the_ID() )): endif;
+```
 
 == Changelog ==
 
