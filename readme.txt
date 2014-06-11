@@ -42,7 +42,7 @@ if( class_exists( 'Voce_Post_Meta_Widgets' ) && !dynamic_sidebar( Voce_Post_Meta
 
 == Changelog ==
 
-= 0.5 =
+= 0.2 =
 * Fixed title and description not showing, updated example code
 
 = 0.1.2 =
