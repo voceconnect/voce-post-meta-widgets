@@ -3,8 +3,8 @@
   Plugin Name: Voce Post Meta Widgets
   Plugin URI: http://vocecommunications.com
   Description: Extend Voce Post Meta with widget fields
-  Version: 0.1.2
-  Author: matstars, markparolisi, voceplatforms
+  Version: 0.2
+  Author: matstars, markparolisi, banderon, voceplatforms
   Author URI: http://vocecommunications.com
   License: GPL2
  */
@@ -309,8 +309,7 @@ if ( !function_exists( 'voce_widgets_field_display' ) ) {
 		?>
 		<input type="hidden" id="voce-post-widgets-exist" value="true"/>
 		<div class="column-2 voce-post-meta-widget-drop">
-			<label for="meta_elements_description"><strong><?php _e( 'Active Widgets' ); ?></strong></label>
-
+			<?php voce_field_label_display( $field ); ?>
 			<div class="sidebar voce-post-meta-widget-wrap">
 				<div class="column-2-widgets">
 					<div class="sidebar widget-droppable widget-list" id="<?php echo $value_post->post_name; ?>_0">
@@ -318,6 +317,7 @@ if ( !function_exists( 'voce_widgets_field_display' ) ) {
 					</div>
 				</div>
 			</div>
+			<?php echo !empty( $field->description ) ? ('<span class="description">' . wp_kses( $field->description, Voce_Meta_API::GetInstance()->description_allowed_html ) . '</span>') : ''; ?>
 		</div>
 	<?php
 	}

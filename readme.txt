@@ -1,9 +1,9 @@
 === Voce Meta Post Meta Widgets ===
-Contributors: matstars, markparolisi, voceplatforms
+Contributors: matstars, markparolisi, banderon, voceplatforms
 Tags: post, meta, widgets, widget area
 Requires at least: 3.3
 Tested up to: 3.9.0
-Stable tag: 0.1.2
+Stable tag: 0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,10 +37,13 @@ add_filter('voce_post_meta_widgets_post_types', function( $current_post_types ) 
 ```
 1. Display the sidebar on a page
 ```
-if( !dynamic_sidebar( Voce_Post_Meta_Widgets::WIDGET_ID_PREFIX . $group_name . '_' . $field_name . '_post_id_' . get_the_ID() )): endif;
+if( class_exists( 'Voce_Post_Meta_Widgets' ) && !dynamic_sidebar( Voce_Post_Meta_Widgets::WIDGET_ID_PREFIX . $group_name . '_' . $field_name . '_post_id_' . get_the_ID() )): endif;
 ```
 
 == Changelog ==
+
+= 0.2 =
+* Fixed title and description not showing, updated example code
 
 = 0.1.2 =
 * Refactored load order

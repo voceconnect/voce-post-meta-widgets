@@ -28,3 +28,7 @@
 .voce-post-meta-widget-drop {
 	margin-top:15px;
 }
+
+.voce-post-meta-widget-drop .widget-inside {
+	padding: 0 10px 10px;
+}
