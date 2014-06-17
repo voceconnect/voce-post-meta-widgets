@@ -3,7 +3,7 @@
   Plugin Name: Voce Post Meta Widgets
   Plugin URI: http://vocecommunications.com
   Description: Extend Voce Post Meta with widget fields
-  Version: 0.2
+  Version: 0.3
   Author: matstars, markparolisi, banderon, voceplatforms
   Author URI: http://vocecommunications.com
   License: GPL2
@@ -131,7 +131,7 @@ class Voce_Post_Meta_Widgets {
 				__CLASS__,
 				'hidden_widgets_metabox'
 			);
-			add_meta_box( 'voce_widgets_hidden', 'Widgets Hidden', $callback, $post_type, $location, $priority );
+			add_meta_box( 'voce_widgets_hidden', 'Widgets Hidden', $callback, $post_type, $location, $priority, $post );
 		}
 	}
 
@@ -160,7 +160,7 @@ class Voce_Post_Meta_Widgets {
 	 *
 	 * @method hidden_widgets_metabox
 	 */
-	public static function hidden_widgets_metabox() {
+	public static function hidden_widgets_metabox( $post ) {
 		$widgets = wp_get_sidebars_widgets();
 		$sidebar_ids = array_keys( $widgets );
 		?>
