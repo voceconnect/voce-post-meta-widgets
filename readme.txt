@@ -3,7 +3,7 @@ Contributors: matstars, markparolisi, banderon, voceplatforms
 Tags: post, meta, widgets, widget area
 Requires at least: 3.3
 Tested up to: 3.9.0
-Stable tag: 0.2
+Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ if( class_exists( 'Voce_Post_Meta_Widgets' ) && !dynamic_sidebar( Voce_Post_Meta
 ```
 
 == Changelog ==
+
+= 0.3 =
+* Fixed bug where adding a widget would clear sidebars on all other posts
 
 = 0.2 =
 * Fixed title and description not showing, updated example code
