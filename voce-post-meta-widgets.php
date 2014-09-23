@@ -38,6 +38,26 @@ class Voce_Post_Meta_Widgets {
 
 		add_action( 'plugins_loaded', array( __CLASS__, 'check_voce_meta_api' ) );
 
+		add_action( 'delete_post', array( __CLASS__, 'deleted_post' ) );
+	}
+
+	public function deleted_post( $post_id ){
+
+		// post_id does not seem to always be accurate? override it with global post object
+		global $post;
+		$post_id = $post->ID;
+		$sidebars = get_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME );
+		foreach($sidebars as $sidebar_id => $sidebar_name ){
+
+			$needle = '_post_id_' . $post_id;
+			if ( strstr( $sidebar_id, $needle) ){
+				unset($sidebars[$sidebar_id]);
+			}
+
+		}
+		update_option( self::SIDEBAR_OPTION_NAME, $sidebars );
+
+
 	}
 
 	/**
