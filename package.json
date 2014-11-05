@@ -1,7 +1,7 @@
 {
   "name": "voce-post-meta-widgets",
   "description": "Extend Voce Post Meta with widget fields",
-  "version": "0.3",
+  "version": "1.0.0",
   "homepage": "https://github.com/voceconnect/voce-post-meta-widgets",
   "author": {
     "name": "voceplatforms"
