@@ -1,0 +1,17 @@
+{
+    "name": "voceconnect/voce-post-meta-widgets",
+    "description": "Extension of Voce Post Meta API to add widgets meta field",
+    "keywords": ["wordpress", "post meta, widgets"],
+    "license": "GPLv2+",
+    "authors": [
+        {
+            "name": "Mark Parolisi",
+            "email": "mark@voceconnect.com"
+        },
+        {
+            "name": "Gary Smirny",
+            "email": "gary@voceconnect.com"
+        }
+    ],
+    "type": "wordpress-plugin"
+}
