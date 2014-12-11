@@ -74,6 +74,7 @@ class Voce_Post_Meta_Widgets {
 	 */
 	public static function register_sidebars() {
 		$sidebars = get_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME );
+		$sidebars = array_filter($sidebars);
 		if ( is_array( $sidebars ) && !empty( $sidebars ) ) {
 			foreach ( $sidebars as $sidebar ) {
 				$args = array(
