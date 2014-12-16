@@ -35,7 +35,29 @@ class Voce_Post_Meta_Widgets {
 	 * @method initialize
 	 */
 	public static function initialize() {
+
 		add_action( 'plugins_loaded', array( __CLASS__, 'check_voce_meta_api' ) );
+
+		add_action( 'delete_post', array( __CLASS__, 'deleted_post' ) );
+	}
+
+	public function deleted_post( $post_id ){
+
+		// post_id does not seem to always be accurate? override it with global post object
+		global $post;
+		$post_id = $post->ID;
+		$sidebars = get_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME );
+		foreach($sidebars as $sidebar_id => $sidebar_name ){
+
+			$needle = '_post_id_' . $post_id;
+			if ( strstr( $sidebar_id, $needle) ){
+				unset($sidebars[$sidebar_id]);
+			}
+
+		}
+		update_option( self::SIDEBAR_OPTION_NAME, $sidebars );
+
+
 	}
 
 	/**
@@ -62,7 +84,6 @@ class Voce_Post_Meta_Widgets {
 	protected static function bootstrap() {
 		require_once( ABSPATH . '/wp-admin/includes/widgets.php' );
 		add_action( 'after_setup_theme', array( __CLASS__, 'register_sidebars' ) );
-		add_action( 'load-widgets.php', array( __CLASS__, 'hide_sidebars' ) );
 		add_filter( 'meta_type_mapping', array( __CLASS__, 'meta_type_mapping' ) );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'action_add_meta_boxes' ), 10, 2 );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'action_admin_enqueue_scripts' ) );
@@ -78,10 +99,13 @@ class Voce_Post_Meta_Widgets {
 			$sidebars = array_filter($sidebars);
 
 		if ( is_array( $sidebars ) && !empty( $sidebars ) ) {
-			foreach ( $sidebars as $sidebar ) {
+			foreach ( $sidebars as $id=>$name ) {
+				if ( ! $id ) {
+					continue;
+				}
 				$args = array(
-					'name'          => $sidebar,
-					'id'            => $sidebar,
+					'name'          => $name,
+					'id'            => $id,
 					'description'   => 'Drag &amp; Drop Widgets from the Right Sidebar to Below',
 					'before_widget' => '<li id="%1$s" class="widget %2$s">',
 					'after_widget'  => '</li>',
@@ -120,8 +144,8 @@ class Voce_Post_Meta_Widgets {
 	 * @param $post
 	 */
 	public static function action_add_meta_boxes( $post_type, $post ) {
-		$post_types = apply_filters( 'voce_post_meta_widgets_post_types', array() );
-		if ( in_array( $post_type, $post_types ) ) {
+		$post_types = (array)apply_filters( 'voce_post_meta_widgets_post_types', $post_type, $post );
+		if ( count($post_types) && in_array( $post_type, $post_types ) ) {
 			$location = apply_filters( 'voce_post_meta_widgets_widget_choices_location', 'side' );
 			$priority = apply_filters( 'voce_post_meta_widgets_widget_choices_priority', 'low' );
 			$callback = array(
@@ -166,6 +190,8 @@ class Voce_Post_Meta_Widgets {
 	public static function hidden_widgets_metabox( $post ) {
 		$widgets = wp_get_sidebars_widgets();
 		$sidebar_ids = array_keys( $widgets );
+		//backup the global post object, because it gets reset
+		$backup_post = $GLOBALS['post'];
 		?>
 		<div class="hidden-field">
 			<?php
@@ -181,26 +207,11 @@ class Voce_Post_Meta_Widgets {
 			?>
 		</div>
 		<?php
+		//reset the global post object with the backed up post object
+		$GLOBALS['post'] = $backup_post;
 		add_filter( 'postbox_classes_post_voce_widgets_hidden', function ( $classes ) {
 			return array_merge( $classes, array( 'hidden-field' ) );
 		} );
-	}
-
-	/**
-	 * Hide Custom Sidebars on Widgets.php
-	 *
-	 * @method hide_sidebars
-	 * @return void
-	 */
-	public static function hide_sidebars() {
-		global $pagenow, $wp_registered_sidebars;
-		if ( is_admin() && 'widgets.php' === $pagenow ) {
-			foreach ( $wp_registered_sidebars as $sidebar ) {
-				if ( false !== strpos( $sidebar[ 'id' ], self::WIDGET_ID_PREFIX ) ) {
-					unregister_sidebar( $sidebar[ 'id' ] );
-				}
-			}
-		}
 	}
 
 	/**
@@ -218,44 +229,12 @@ class Voce_Post_Meta_Widgets {
 	public static function action_admin_enqueue_scripts( $hook ) {
 		$pages = apply_filters( 'voce_post_meta_widgets_scripts', array( 'post-new.php', 'post.php', 'edit.php' ) );
 		if ( in_array( $hook, $pages ) ) {
-			wp_enqueue_script( 'voce-post-meta-widgets', self::plugins_url( '/js/voce-post-meta-widgets.min.js', __FILE__ ), array(
+			wp_enqueue_script( 'voce-post-meta-widgets', plugins_url( '/js/voce-post-meta-widgets.min.js', __FILE__ ), array(
 				'jquery-ui-sortable',
 				'jquery-ui-draggable',
 				'jquery-ui-droppable'
 			) );
-			wp_enqueue_style( 'voce-post-meta-widgets', self::plugins_url( '/css/voce-post-meta-widgets.min.css', __FILE__ ) );
-		}
-	}
-
-	/**
-	 *
-	 * Allow this plugin to live either in the plugins directory or inside
-	 * the themes directory.
-	 *
-	 * @method plugins_url
-	 * @param type $relative_path
-	 * @param type $plugin_path
-	 *
-	 * @return string
-	 */
-	public static function plugins_url( $relative_path, $plugin_path ) {
-		$template_dir = get_template_directory();
-		foreach ( array( 'template_dir', 'plugin_path' ) as $var ) {
-			$$var = str_replace( '\\', '/', $$var ); // sanitize for Win32 installs
-			$$var = preg_replace( '|/+|', '/', $$var );
-		}
-		if ( 0 === strpos( $plugin_path, $template_dir ) ) {
-			$url = get_template_directory_uri();
-			$folder = str_replace( $template_dir, '', dirname( $plugin_path ) );
-			if ( '.' != $folder ) {
-				$url .= '/' . ltrim( $folder, '/' );
-			}
-			if ( !empty( $relative_path ) && is_string( $relative_path ) && strpos( $relative_path, '..' ) === false ) {
-				$url .= '/' . ltrim( $relative_path, '/' );
-			}
-			return $url;
-		} else {
-			return plugins_url( $relative_path, $plugin_path );
+			wp_enqueue_style( 'voce-post-meta-widgets', plugins_url( '/css/voce-post-meta-widgets.min.css', __FILE__ ) );
 		}
 	}
 
@@ -342,12 +321,31 @@ if ( !function_exists( 'voce_widgets_field_submit' ) ) {
 		if ( empty( $post_id ) ) {
 			global $post;
 			$post_id = $post->ID;
+
+		} else {
+			$post = get_post($post_id);
+
 		}
+
+		if ( ! $post_id ) {
+			return;
+		}
+
+		$post_title = $post->post_title;
+		$post_type = $post->post_type;
+
 		$sidebar_id = Voce_Post_Meta_Widgets::WIDGET_ID_PREFIX . $field->get_input_id() . '_post_id_' . $post_id;
-		$sidebars = get_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME );
-		$sidebars = array_unique(array_merge( (array) $sidebars, array( $sidebar_id ) ));
-		$sidebars = Voce_Post_Meta_Widgets::clean_sidebars( $sidebars );
-		update_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME, $sidebars );
+		$sidebars = get_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME, array() );
+
+		$new_sidebar = array( $sidebar_id => sprintf('%s (%s) - ID: %s', $post_title, $post_type, $post_id ) );
+
+		$sidebars = array_merge( (array) $sidebars, $new_sidebar );
+
+		if ( $new_sidebar && is_array( $new_sidebar ) ) {
+			$sidebars = array_filter($sidebars);
+			update_option( Voce_Post_Meta_Widgets::SIDEBAR_OPTION_NAME, $sidebars );;
+
+		}
 	}
 }
 
