@@ -3,7 +3,7 @@
   Plugin Name: Voce Post Meta Widgets
   Plugin URI: http://vocecommunications.com
   Description: Extend Voce Post Meta with widget fields
-  Version: 1.0.0
+  Version: 1.0.1
   Author: matstars, markparolisi, banderon, voceplatforms
   Author URI: http://vocecommunications.com
   License: GPL2
