@@ -3,7 +3,7 @@
   Plugin Name: Voce Post Meta Widgets
   Plugin URI: http://vocecommunications.com
   Description: Extend Voce Post Meta with widget fields
-  Version: 0.3
+  Version: 1.0.0
   Author: matstars, markparolisi, banderon, voceplatforms
   Author URI: http://vocecommunications.com
   License: GPL2
@@ -14,7 +14,6 @@
  * @class Voce_Post_Meta_Widgets
  * Class notes:
  *    Filters:
- *    voce_post_meta_widgets_post_types - post types that have widget area added (defaults to none)
  *    voce_post_meta_widgets_widget_choices_location - location of metabox for widget choices (defaults to side)
  *    voce_post_meta_widgets_widget_choices_priority - priority of metabox for widget choices (defaults to low)
  *
@@ -35,7 +34,7 @@ class Voce_Post_Meta_Widgets {
 	 * @method initialize
 	 */
 	public static function initialize() {
-		add_action( 'plugins_loaded', array( __CLASS__, 'check_voce_meta_api' ) );
+		add_action( 'init', array( __CLASS__, 'check_voce_meta_api' ) );
 	}
 
 	/**
@@ -60,8 +59,9 @@ class Voce_Post_Meta_Widgets {
 	 * @method bootstrap
 	 */
 	protected static function bootstrap() {
+		require_once( __DIR__ . '/voce-post-meta-widgets-field.php' );
 		require_once( ABSPATH . '/wp-admin/includes/widgets.php' );
-		add_action( 'after_setup_theme', array( __CLASS__, 'register_sidebars' ) );
+		add_action( 'widgets_init', array( __CLASS__, 'register_sidebars' ) );
 		add_action( 'load-widgets.php', array( __CLASS__, 'hide_sidebars' ) );
 		add_filter( 'meta_type_mapping', array( __CLASS__, 'meta_type_mapping' ) );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'action_add_meta_boxes' ), 10, 2 );
@@ -104,7 +104,7 @@ class Voce_Post_Meta_Widgets {
 	 */
 	public static function meta_type_mapping( $mapping ) {
 		$mapping[ 'widgets' ] = array(
-			'class' => 'Voce_Meta_Field',
+			'class' => 'Voce_Post_Meta_Widgets_Field',
 			'args'  => array(
 				'display_callbacks'  => array( 'voce_widgets_field_display' ),
 				'sanitize_callbacks' => array( 'voce_widgets_field_submit' )
@@ -120,22 +120,38 @@ class Voce_Post_Meta_Widgets {
 	 * @param $post
 	 */
 	public static function action_add_meta_boxes( $post_type, $post ) {
-		$post_types = apply_filters( 'voce_post_meta_widgets_post_types', array() );
-		if ( in_array( $post_type, $post_types ) ) {
-			$location = apply_filters( 'voce_post_meta_widgets_widget_choices_location', 'side' );
-			$priority = apply_filters( 'voce_post_meta_widgets_widget_choices_priority', 'low' );
-			$callback = array(
-				__CLASS__,
-				'sidebar_admin_metabox'
-			);
-			add_meta_box( 'sidebar_admin', 'Sidebar Admin', $callback, $post_type, $location, $priority );
+		global $_wp_post_type_features;
 
-			$callback = array(
-				__CLASS__,
-				'hidden_widgets_metabox'
-			);
-			add_meta_box( 'voce_widgets_hidden', 'Widgets Hidden', $callback, $post_type, $location, $priority, $post );
+		$add_metas = false;
+		if ( $custom_meta_groups = array_keys( array_intersect_key( $_wp_post_type_features[ $post_type ], Voce_Meta_API::GetInstance()->groups ) ) ) {
+			foreach ( $custom_meta_groups as $group_id ) {
+				if ( count( Voce_Meta_API::GetInstance()->groups[ $group_id ]->fields ) ) {
+					foreach ( Voce_Meta_API::GetInstance()->groups[ $group_id ]->fields as $field ) {
+						if ( ! empty( $field->field_type ) && 'widget' == $field->field_type ) {
+							$add_metas = true;
+							break 2;
+						}
+					}
+				}
+			}
 		}
+		if ( ! $add_metas ) {
+			return;
+		}
+
+		$location = apply_filters( 'voce_post_meta_widgets_widget_choices_location', 'side', $post_type, $post );
+		$priority = apply_filters( 'voce_post_meta_widgets_widget_choices_priority', 'low', $post_type, $post );
+		$callback = array(
+			__CLASS__,
+			'sidebar_admin_metabox'
+		);
+		add_meta_box( 'sidebar_admin', 'Sidebar Admin', $callback, $post_type, $location, $priority );
+
+		$callback = array(
+			__CLASS__,
+			'hidden_widgets_metabox'
+		);
+		add_meta_box( 'voce_widgets_hidden', 'Widgets Hidden', $callback, $post_type, $location, $priority, $post );
 	}
 
 	/**

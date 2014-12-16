@@ -3,6 +3,7 @@
     "description": "Extension of Voce Post Meta API to add widgets meta field",
     "keywords": ["wordpress", "post meta", "widgets"],
     "license": "GPLv2+",
+    "type": "library",
     "authors": [
         {
             "name": "Mark Parolisi",
@@ -13,5 +14,10 @@
             "email": "gary@voceconnect.com"
         }
     ],
-    "type": "wordpress-plugin"
+    "autoload": {
+        "files": ["voce-post-meta-widgets.php"]
+    },
+    "require": {
+        "voceconnect/voce-post-meta": ">=1.7.0"
+    },
 }
