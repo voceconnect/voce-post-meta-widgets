@@ -34,7 +34,7 @@ class Voce_Post_Meta_Widgets {
 	 * @method initialize
 	 */
 	public static function initialize() {
-		add_action( 'plugins_loaded', array( __CLASS__, 'check_voce_meta_api' ) );
+		add_action( 'init', array( __CLASS__, 'check_voce_meta_api' ) );
 	}
 
 	/**
@@ -61,7 +61,7 @@ class Voce_Post_Meta_Widgets {
 	protected static function bootstrap() {
 		require_once( __DIR__ . '/voce-post-meta-widgets-field.php' );
 		require_once( ABSPATH . '/wp-admin/includes/widgets.php' );
-		add_action( 'after_setup_theme', array( __CLASS__, 'register_sidebars' ) );
+		add_action( 'widgets_init', array( __CLASS__, 'register_sidebars' ) );
 		add_action( 'load-widgets.php', array( __CLASS__, 'hide_sidebars' ) );
 		add_filter( 'meta_type_mapping', array( __CLASS__, 'meta_type_mapping' ) );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'action_add_meta_boxes' ), 10, 2 );
