@@ -3,7 +3,7 @@ Contributors: matstars, markparolisi, banderon, voceplatforms
 Tags: post, meta, widgets, widget area  
 Requires at least: 3.5  
 Tested up to: 4.0  
-Stable tag: 1.0.0  
+Stable tag: 1.0.1  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,8 @@ if( class_exists( 'Voce_Post_Meta_Widgets' ) && !dynamic_sidebar( Voce_Post_Meta
 ```
 
 == Changelog ==  
+= 1.0.1 =
+* Fixing conflict with hooks causing saving issues
 
 = 1.0.0 =  
 * Initial release
