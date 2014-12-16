@@ -34,7 +34,7 @@ class Voce_Post_Meta_Widgets {
 	 * @method initialize
 	 */
 	public static function initialize() {
-		add_action( 'init', array( __CLASS__, 'check_voce_meta_api' ) );
+		self::check_voce_meta_api();
 	}
 
 	/**
