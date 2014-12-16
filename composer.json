@@ -19,5 +19,5 @@
     },
     "require": {
         "voceconnect/voce-post-meta": ">=1.7.0"
-    },
+    }
 }
