@@ -13,5 +13,8 @@
             "email": "gary@voceconnect.com"
         }
     ],
-    "type": "library"
+    "type": "library",
+    "autoload": {
+        "files": ["voce-post-meta-widgets.php"]
+    }
 }
